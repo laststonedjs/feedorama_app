@@ -95,14 +95,37 @@ const questions = [
   }
 ]
 
-// create a function to populate questions
+// create a function to populate questions block
 const populateQuestions = () => {
   questions.forEach(question => {
     const titleBlock = document.createElement('div');
     titleBlock.id = question.id;
     titleBlock.classList.add('title-block');
-
+    const titleHeading = document.createElement('h2');
+    titleHeading.textContent = question.text;
+    titleBlock.append(titleHeading);
     questionDisplay.append(titleBlock);
+
+    // create a div with answers block & made style for 'answer-options'
+    const answersBlock = document.createElement('div');
+    answersBlock.id = question.id + '-questions';
+    answersBlock.classList.add('answer-options');
+
+    // populate 'answer-options' div with data from answers array in the questions object above on the top
+    question.answers.forEach(answer => {
+      const answerBlock = document.createElement('div');
+      answerBlock.classList.add('answer-block');
+      answerBlock.addEventListener('click', handleClick);
+      const answerImage = document.createElement('img');
+
+    })
+
+    questionDisplay.append(answersBlock);
+
   })
 }
 populateQuestions();
+
+const handleClick = () => {
+  console.log('clicked');
+}
