@@ -171,11 +171,22 @@ const handleClick = (questionId, chosenAnswer) => {
 
   // disableQuestionBlock(questionId, chosenAnswer)
   // scroll to the top of unanswered questions
-  const lowestQuestionId = Math.min(...unansweredQuestions)
+  const lowestQuestionId = Math.min(...unansweredQuestions);
+  location.href = '#' + lowestQuestionId;
 
   // a case in which there is nothing in our 'unansweredQuestions' array
   if (!unansweredQuestions.length) {
     // scroll to answer div
-    showAnswer();
+    // showAnswer();
   }
+}
+
+const showAnswer = () => {
+
+
+  const answerBlock = document.createElement('div');
+  answerBlock.classList.add('result-block');
+  const answerTitle = document.createElement('h3');
+  answerTitle.textContent = result.text;
+  const answerImage = document.createElement('img');
 }
