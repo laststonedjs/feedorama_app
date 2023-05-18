@@ -95,6 +95,12 @@ const questions = [
   }
 ]
 
+// empty array for our unanswered q.
+const unansweredQuestions = [];
+
+// empty array for our unanswered q.
+const chosenAnswers = [];
+
 // create a function to populate questions block
 const populateQuestions = () => {
   questions.forEach(question => {
@@ -111,11 +117,15 @@ const populateQuestions = () => {
     answersBlock.id = question.id + '-questions';
     answersBlock.classList.add('answer-options');
 
+    // push all of our questions with id in the new 'unansweredQuestions' array
+    // looping over each question
+    unansweredQuestions.push(question.id);
+
     // populate 'answer-options' div with data from answers array in the questions object above on the top
     question.answers.forEach(answer => {
       const answerBlock = document.createElement('div');
       answerBlock.classList.add('answer-block');
-      answerBlock.addEventListener('click', () => handleClick);
+      answerBlock.addEventListener('click', () => handleClick(question.id, answer.text));
       const answerImage = document.createElement('img');
       answerImage.setAttribute('src', answer.image);
       answerImage.setAttribute('alt', answer.alt);
@@ -147,6 +157,25 @@ const populateQuestions = () => {
 }
 populateQuestions();
 
-const handleClick = () => {
-  console.log('clicked');
+const handleClick = (questionId, chosenAnswer) => {
+  if (unansweredQuestions.includes(questionId))
+    chosenAnswers.push(chosenAnswer);
+
+  const itemToRemove = unansweredQuestions.indexOf(questionId);
+  // here we remove something from an array based on it's answer
+  if (itemToRemove > -1) {
+    unansweredQuestions.splice(itemToRemove, 1);
+  }
+  console.log(chosenAnswers);
+  console.log(unansweredQuestions);
+
+  // disableQuestionBlock(questionId, chosenAnswer)
+  // scroll to the top of unanswered questions
+  const lowestQuestionId = Math.min(...unansweredQuestions)
+
+  // a case in which there is nothing in our 'unansweredQuestions' array
+  if (!unansweredQuestions.length) {
+    // scroll to answer div
+    showAnswer();
+  }
 }
