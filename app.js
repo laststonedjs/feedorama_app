@@ -115,9 +115,29 @@ const populateQuestions = () => {
     question.answers.forEach(answer => {
       const answerBlock = document.createElement('div');
       answerBlock.classList.add('answer-block');
-      answerBlock.addEventListener('click', handleClick);
+      answerBlock.addEventListener('click', () => handleClick);
       const answerImage = document.createElement('img');
+      answerImage.setAttribute('src', answer.image);
+      answerImage.setAttribute('alt', answer.alt);
 
+      // create answerTitle element
+      const answerTitle = document.createElement('h3');
+      answerTitle.textContent = answer.text;
+
+      // create answerInfo & imageLink elements
+      const answerInfo = document.createElement('p');
+      const imageLink = document.createElement('a');
+      imageLink.setAttribute('href', answer.credit); // 'credit' represents who created this image
+      const sourceLink = document.createElement('a');
+      sourceLink.textContent = 'Unsplash';
+      sourceLink.setAttribute('src', 'https://www.unsplash.com');
+      // append elements to answerInfo
+      answerInfo.append(imageLink, ' to ', sourceLink);
+
+      // here we append to the 'answerBlock' previously created elements from above
+      answerBlock.append(answerImage, answerTitle, answerInfo);
+
+      answersBlock.append(answerBlock);
     })
 
     questionDisplay.append(answersBlock);
