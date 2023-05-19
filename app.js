@@ -95,6 +95,34 @@ const questions = [
   }
 ]
 
+const answers = [
+  {
+    combination: ["New York", "Pizza", "Traditional"],
+    text: "Blue Cheese",
+    image: "https://images.unsplash.com/photo-1452195100486-9cc805987862?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjczMTc0fQ&w=400&h=400&fit=fillmax",
+    alt: "Blue cheese"
+  },
+  {
+    combination: ["Austin", "Pasta", "Modern"],
+    text: "Cheddar",
+    image: "https://images.unsplash.com/photo-1618164435735-413d3b066c9a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+    alt: "Cheddar cheese"
+  },
+  {
+    combination: ["Portland", "Sandwich", "Mountains"],
+    text: "Feta",
+    image: "https://images.unsplash.com/photo-1626957341926-98752fc2ba90?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+    alt: "Feta cheese"
+  },
+  {
+    combination: ["New Orleans", "Hamburger", "House"],
+    text: "Halloumi",
+    image: "https://images.unsplash.com/photo-1505281036624-fac2862357b8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1469&q=80",
+    alt: "Halloumi"
+  }
+]
+// need to have a default answer to compensate for lack of combination data
+
 // empty array for our unanswered q.
 const unansweredQuestions = [];
 
@@ -169,7 +197,7 @@ const handleClick = (questionId, chosenAnswer) => {
   console.log(chosenAnswers);
   console.log(unansweredQuestions);
 
-  // disableQuestionBlock(questionId, chosenAnswer)
+  disableQuestionBlock(questionId, chosenAnswer);
   // scroll to the top of unanswered questions
   const lowestQuestionId = Math.min(...unansweredQuestions);
   location.href = '#' + lowestQuestionId;
@@ -177,16 +205,50 @@ const handleClick = (questionId, chosenAnswer) => {
   // a case in which there is nothing in our 'unansweredQuestions' array
   if (!unansweredQuestions.length) {
     // scroll to answer div
-    // showAnswer();
+    location.href = '#answer';
+    showAnswer();
   }
 }
 
 const showAnswer = () => {
-
+  let result;
+  answers.forEach(answer => {
+    if (
+      chosenAnswers.includes(answer.combination[0]) +
+      chosenAnswers.includes(answer.combination[1]) +
+      chosenAnswers.includes(answer.combination[2])
+    ) {
+      result = answer
+      return
+    } else if (!result) {
+      //first answer object is default
+      result = answers[0]
+    }
+  })
 
   const answerBlock = document.createElement('div');
   answerBlock.classList.add('result-block');
   const answerTitle = document.createElement('h3');
   answerTitle.textContent = result.text;
   const answerImage = document.createElement('img');
+  answerImage.setAttribute('src', result.image);
+  answerImage.setAttribute('alt', result.alt);
+
+  answerBlock.append(answerTitle, answerImage);
+
+  answerDisplay.append(answerBlock);
+
+  const allAnswerBlocks = document.querySelector('.answer-block');
+  Array.from(allAnswerBlocks).forEach(answerBlock => answerBlock.replaceWith(answerBlock.cloneNode(true)));
+}
+
+// here we disable the other questions when picked all of three answers
+const disableQuestionBlock = (questionId, chosenAnswer) => {
+  const currentQuestionBlock = document.getElementById(questionId + '-questions');
+
+  Array.from(currentQuestionBlock.children).forEach(block => {
+    if (block.children.item(1).innerText != chosenAnswer) {
+      block.style.opacity = '50%';
+    }
+  })
 }
